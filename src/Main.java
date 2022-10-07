@@ -5,18 +5,18 @@ import java.util.Scanner;
 public class Main {
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
 
-        File textFile = new File("src/basket.txt");
+        File file = new File("src/basket.bin");
         Basket basket;
 
-        if (!textFile.exists()) {
+        if (!file.exists()) {
             String[] products = {"Хлеб", "Яблоки", "Молоко"};
             long[] prices = {100, 200, 300};
             basket = new Basket(prices, products);
 
         } else {
-            basket = Basket.loadFromTxtFile(textFile);
+            basket = Basket.loadFromBinFile(file);
         }
 
         basket.printCart();
@@ -34,10 +34,9 @@ public class Main {
             int productCount = Integer.parseInt(selectedProduct[1]);
             basket.addToCart(productNumber, productCount);
 
-            basket.saveTxt(textFile);
+            basket.saveBin(file);
 
             basket.printCart();
         }
-
     }
 }

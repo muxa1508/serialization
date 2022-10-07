@@ -1,8 +1,6 @@
 import java.io.*;
-import java.util.Arrays;
-import java.util.Scanner;
 
-public class Basket {
+public class Basket implements Serializable {
 
     private long[] productPrice;
     private String[] productName;
@@ -32,34 +30,22 @@ public class Basket {
         }
     }
 
-    public void saveTxt(File textFile) throws IOException {
-        try (PrintWriter out = new PrintWriter(textFile)) {
+    public void saveBin(File file) throws IOException {
+
+        try (FileOutputStream out = new FileOutputStream(file);
+             ObjectOutputStream oos = new ObjectOutputStream(out)) {
             for (String name : productName) {
-                out.print(name + " ");
-            }
-            out.print("\n");
-            for (long price : productPrice) {
-                out.print(price + " ");
-            }
-            out.print("\n");
-            for (int count : productCount) {
-                out.print(count + " ");
+                oos.writeObject(this);
             }
         }
     }
 
-    static Basket loadFromTxtFile(File textFile) throws IOException {
+    static Basket loadFromBinFile(File file) throws IOException, ClassNotFoundException {
 
-        try (FileReader in = new FileReader(textFile)) {
-            Scanner scanner = new Scanner(in);
-            String[] name = scanner.nextLine().split(" ");
-            long[] price = Arrays.stream(scanner.nextLine().split(" "))
-                    .mapToLong(value -> (long) Integer.parseInt(value))
-                    .toArray();
-            int[] count = Arrays.stream(scanner.nextLine().split(" "))
-                    .mapToInt(value -> Integer.parseInt(value))
-                    .toArray();
-            return new Basket(price, name, count);
+        try (FileInputStream in = new FileInputStream(file);
+             ObjectInputStream ois = new ObjectInputStream(in)) {
+            Basket basket = (Basket) ois.readObject();
+            return basket;
         }
     }
 }
