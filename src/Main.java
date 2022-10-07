@@ -1,13 +1,27 @@
+import java.io.File;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
 
-        String[] products = {"Хлеб", "Яблоки", "Молоко"};
-        int[] prices = {100, 200, 300};
-        Basket basket = new Basket(prices, products);
+    public static void main(String[] args) throws IOException {
+
+        File textFile = new File("src/basket.txt");
+        Basket basket;
+
+        if (!textFile.exists()) {
+            String[] products = {"Хлеб", "Яблоки", "Молоко"};
+            long[] prices = {100, 200, 300};
+            basket = new Basket(prices, products);
+
+        } else {
+            basket = Basket.loadFromTxtFile(textFile);
+        }
+
+        basket.printCart();
+
+        Scanner scanner = new Scanner(System.in);
 
         while (true) {
             System.out.println("Введите товар и количество или введите 'end' ");
@@ -20,9 +34,9 @@ public class Main {
             int productCount = Integer.parseInt(selectedProduct[1]);
             basket.addToCart(productNumber, productCount);
 
-            basket.printCart();
+            basket.saveTxt(textFile);
 
-            basket.saveTxt();
+            basket.printCart();
         }
 
     }
