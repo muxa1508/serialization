@@ -50,8 +50,8 @@ public class Basket {
 
     static Basket loadFromTxtFile(File textFile) throws IOException {
 
-        try (FileReader in = new FileReader(textFile)) {
-            Scanner scanner = new Scanner(in);
+        try (FileReader in = new FileReader(textFile);
+            Scanner scanner = new Scanner(in)) {
             String[] name = scanner.nextLine().split(" ");
             long[] price = Arrays.stream(scanner.nextLine().split(" "))
                     .mapToLong(value -> (long) Integer.parseInt(value))
