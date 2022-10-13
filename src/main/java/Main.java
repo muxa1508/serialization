@@ -7,7 +7,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 
-        File textFile = new File("src/basket.txt");
+        File textFile = new File("src/basket.json");
+        File txtFile = new File("src/log.csv");
         Basket basket;
 
         if (!textFile.exists()) {
@@ -19,10 +20,9 @@ public class Main {
             basket = Basket.loadFromTxtFile(textFile);
         }
 
+        ClientLog log = new ClientLog();
         basket.printCart();
-
         Scanner scanner = new Scanner(System.in);
-
         while (true) {
             System.out.println("Введите товар и количество или введите 'end' ");
             String input = scanner.nextLine();
@@ -34,10 +34,14 @@ public class Main {
             int productCount = Integer.parseInt(selectedProduct[1]);
             basket.addToCart(productNumber, productCount);
 
-            basket.saveTxt(textFile);
+            log.log((productNumber + 1), productCount);
+
+//            basket.saveTxt(textFile);
 
             basket.printCart();
         }
+//        log.printlog();
+        log.exportAsCSV(txtFile);
 
     }
 }
