@@ -1,3 +1,6 @@
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+
 import java.io.*;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -33,6 +36,7 @@ public class Basket {
         }
     }
 
+
     public void saveTxt(File textFile) throws IOException {
         try (PrintWriter out = new PrintWriter(textFile)) {
             for (String name : productName) {
@@ -63,5 +67,54 @@ public class Basket {
             return new Basket(price, name, count);
         }
     }
+
+    public void saveJson(File textFile) {
+
+        JSONObject obj = new JSONObject();
+
+        JSONArray productNames = new JSONArray();
+        for (String name : productName) {
+            productNames.add(name);
+        }
+        obj.put("productNames", productNames);
+        JSONArray productPrices = new JSONArray();
+        for (long price : productPrice) {
+            productPrices.add(price);
+        }
+        obj.put("productPrices", productPrices);
+        JSONArray productCounts = new JSONArray();
+        for (int count : productCount) {
+            productCounts.add(count);
+        }
+        obj.put("productCounts", productCounts);
+
+        try (FileWriter file = new FileWriter(textFile)) {
+            file.write(obj.toJSONString());
+            file.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+//    static Basket loadFromJsonFile(File textFile) {
+//    }
+
+//        JSONParser parser = new JSONParser();
+//        try {
+//            Object obj = parser.parse(new FileReader(textFile));
+//            JSONObject jsonObject = (JSONObject) obj;
+//            System.out.println(jsonObject);
+//            JSONArray productNames = (JSONArray) jsonObject.get("productNames");
+//            JSONArray productPrices = (JSONArray) jsonObject.get("productPrices");
+//            JSONArray productCounts = (JSONArray) jsonObject.get("productCounts");
+//
+//
+//            }
+//
+//        } catch (IOException | ParseException e) {
+//            e.printStackTrace();
+//        }
+//        return new Basket();
+
 }
 

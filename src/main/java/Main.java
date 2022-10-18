@@ -1,3 +1,7 @@
+import org.json.simple.parser.ParseException;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
@@ -5,20 +9,24 @@ import java.util.Scanner;
 public class Main {
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, ParserConfigurationException, SAXException, ParseException {
 
-        File textFile = new File("src/basket.json");
-        File txtFile = new File("src/log.csv");
-        Basket basket;
+        SettingsChecker settings = new SettingsChecker();
+        settings.settingscheck();
+        Basket basket = null;
 
-        if (!textFile.exists()) {
+        if (settings.loadEnabled.equals("true")) {
+            if (settings.loadFormat.equals("json")) {
+//                basket = Basket.loadFromJsonFile(new File(settings.loadFilename));
+            } else {
+                basket = Basket.loadFromTxtFile(new File(settings.loadFilename));
+            }
+        } else {
             String[] products = {"Хлеб", "Яблоки", "Молоко"};
             long[] prices = {100, 200, 300};
             basket = new Basket(prices, products);
-
-        } else {
-            basket = Basket.loadFromTxtFile(textFile);
         }
+
 
         ClientLog log = new ClientLog();
         basket.printCart();
@@ -36,12 +44,23 @@ public class Main {
 
             log.log((productNumber + 1), productCount);
 
-//            basket.saveTxt(textFile);
+            if (settings.saveEnabled.equals("true")) {
+                if (settings.saveFormat.equals("json")) {
+                    basket.saveJson(new File(settings.saveFilename));
+                } else {
+                    basket.saveTxt(new File(settings.saveFilename));
+                }
+            }
 
             basket.printCart();
+            log.printlog();
         }
-//        log.printlog();
-        log.exportAsCSV(txtFile);
+
+        if (settings.logEnabled.equals("true")) {
+            log.exportAsCSV(new File(settings.logFilename));
+        }
 
     }
+
+
 }
