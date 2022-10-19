@@ -54,13 +54,11 @@ public class Main {
 
             basket.printCart();
             log.printlog();
+
         }
 
         if (settings.logEnabled.equals("true")) {
             log.exportAsCSV(new File(settings.logFilename));
         }
-
     }
-
-
 }

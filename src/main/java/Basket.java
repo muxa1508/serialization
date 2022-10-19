@@ -98,9 +98,7 @@ public class Basket {
         }
     }
 
-    static Basket loadFromJsonFile(File textFile) throws IOException, ParseException {
-//
-
+    static Basket loadFromJsonFile(File textFile) {
         try {
             JSONParser parser = new JSONParser();
             Object obj = parser.parse(new FileReader(textFile));
@@ -119,18 +117,13 @@ public class Basket {
             JSONArray productCounts = (JSONArray) jsonObject.get("productCounts");
             long[] productCount = new long[productCounts.size()];
             for (int i = 0; i < productCounts.size(); i++) {
-                productCount[i] =  (long) productCounts.get(i);
+                productCount[i] = (long) productCounts.get(i);
             }
-
-//            String[] productNames = (String[]) jsonObject.get("productNames");
-//            long[] productPrices = (long[]) jsonObject.get("productPrices");
-//            int[] productCounts = (int[]) jsonObject.get("productCounts");
             return new Basket(productPrice, productName, productCount);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
-
     }
 }
