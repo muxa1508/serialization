@@ -13,17 +13,17 @@ public class Main {
 
         SettingsChecker settings = new SettingsChecker();
         settings.settingscheck();
-        Basket basket = null;
+        Basket basket;
 
         if (settings.loadEnabled.equals("true")) {
             if (settings.loadFormat.equals("json")) {
-//                basket = Basket.loadFromJsonFile(new File(settings.loadFilename));
+                basket = Basket.loadFromJsonFile(new File(settings.loadFilename));
             } else {
                 basket = Basket.loadFromTxtFile(new File(settings.loadFilename));
             }
         } else {
             String[] products = {"Хлеб", "Яблоки", "Молоко"};
-            long[] prices = {100, 200, 300};
+            double[] prices = {100, 200, 300};
             basket = new Basket(prices, products);
         }
 
